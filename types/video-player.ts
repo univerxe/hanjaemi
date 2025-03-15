@@ -7,6 +7,6 @@ export interface CustomVideoPlayerProps extends VideoPlayerProps {
   youtubeId?: string;
 }
 
-export interface YouTubeVideoPlayerProps extends VideoPlayerProps {
-  youtubeId: string;
+export interface YouTubeVideoPlayerProps {
+  src: string;
 }

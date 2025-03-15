@@ -1,88 +1,140 @@
 "use client"
 
-import { useEffect, useRef } from "react"
+import { useState, useRef } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { YouTubeVideoPlayerProps } from "@/types/video-player"
-import YouTube from "react-youtube"
+import { Button } from "@/components/ui/button"
+import { Play, Pause, Volume2, VolumeX, Maximize } from "lucide-react"
+import { Slider } from "@/components/ui/slider"
+import ReactPlayer from "react-player"
 
-export default function YouTubeVideoPlayer({ youtubeId, onColorChange }: YouTubeVideoPlayerProps) {
-  const canvasRef = useRef<HTMLCanvasElement>(null)
-  const playerRef = useRef<any>(null)
+export default function YouTubeVideoPlayer({ src }: YouTubeVideoPlayerProps) {
+  const [isPlaying, setIsPlaying] = useState(false)
+  const [volume, setVolume] = useState(1)
+  const [isMuted, setIsMuted] = useState(false)
+  const [played, setPlayed] = useState(0)
+  const [duration, setDuration] = useState(0)
+  const [seeking, setSeeking] = useState(false)
+  const [showControls, setShowControls] = useState(true)
+  const playerRef = useRef<ReactPlayer>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
 
-  const extractColor = (videoElement: HTMLElement) => {
-    const canvas = canvasRef.current
-    if (!canvas) return
-
-    const context = canvas.getContext("2d", { willReadFrequently: true })
-    if (!context) return
-
-    try {
-      context.drawImage(videoElement as any, 0, 0, canvas.width, canvas.height)
-      const imageData = context.getImageData(0, 0, canvas.width, canvas.height)
-      const data = imageData.data
-
-      let r = 0, g = 0, b = 0, count = 0
-
-      for (let i = 0; i < data.length; i += 20) {
-        r += data[i]
-        g += data[i + 1]
-        b += data[i + 2]
-        count++
-      }
-
-      r = Math.floor(r / count)
-      g = Math.floor(g / count)
-      b = Math.floor(b / count)
-
-      onColorChange(`rgba(${r}, ${g}, ${b}, 0.5)`)
-    } catch (e) {
-      console.error("Error extracting color:", e)
-    }
+  const handlePlayPause = () => {
+    setIsPlaying(!isPlaying)
   }
 
-  const onReady = (event: any) => {
-    playerRef.current = event.target
+  const handleVolumeChange = (value: number[]) => {
+    const newVolume = value[0]
+    setVolume(newVolume)
+    setIsMuted(newVolume === 0)
   }
 
-  useEffect(() => {
-    let animationFrame: number
-    
-    const updateColor = () => {
-      if (playerRef.current) {
-        const iframe = playerRef.current.getIframe()
-        extractColor(iframe)
-      }
-      animationFrame = requestAnimationFrame(updateColor)
-    }
+  const handleSeekChange = (value: number[]) => {
+    setPlayed(value[0])
+  }
 
+  const handleSeekMouseUp = (value: number[]) => {
+    setSeeking(false)
     if (playerRef.current) {
-      updateColor()
+      playerRef.current.seekTo(value[0])
     }
+  }
 
-    return () => {
-      cancelAnimationFrame(animationFrame)
+  const toggleMute = () => {
+    setIsMuted(!isMuted)
+  }
+
+  const handleProgress = (state: { played: number; playedSeconds: number }) => {
+    if (!seeking) {
+      setPlayed(state.played)
     }
-  }, [playerRef.current])
+  }
+
+  const handleDuration = (duration: number) => {
+    setDuration(duration)
+  }
+
+  const formatTime = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60)
+    seconds = Math.floor(seconds % 60)
+    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`
+  }
 
   return (
     <Card className="w-full h-auto overflow-hidden">
       <CardContent className="p-0">
-        <div className="relative w-full" style={{ aspectRatio: "16/9" }}>
-          <YouTube
-            videoId={youtubeId}
-            opts={{
-              width: "100%",
-              height: "100%",
-              playerVars: {
-                autoplay: 0,
-                modestbranding: 1,
-                rel: 0,
-              },
+        <div 
+          className="relative w-full" 
+          style={{ aspectRatio: "16/9" }}
+          ref={containerRef}
+          onMouseEnter={() => setShowControls(true)}
+          onMouseLeave={() => isPlaying && setShowControls(false)}
+        >
+          <ReactPlayer
+            ref={playerRef}
+            url={src}
+            width="100%"
+            height="100%"
+            playing={isPlaying}
+            volume={volume}
+            muted={isMuted}
+            onProgress={handleProgress}
+            onDuration={handleDuration}
+            config={{
+              youtube: {
+                playerVars: {
+                  controls: 0,
+                  modestbranding: 1,
+                  showinfo: 0,
+                }
+              }
             }}
-            onReady={onReady}
-            className="absolute inset-0"
+            style={{ position: 'absolute', top: 0, left: 0 }}
           />
-          <canvas ref={canvasRef} width="150" height="100" className="hidden" />
+
+          <div
+            className={`absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/60 to-transparent transition-opacity duration-300 ${
+              showControls ? 'opacity-100' : 'opacity-0'
+            }`}
+          >
+            <div className="p-4 space-y-2">
+              <Slider
+                value={[played]}
+                max={1}
+                step={0.001}
+                onValueChange={handleSeekChange}
+                onValueCommit={handleSeekMouseUp}
+                className="h-1"
+              />
+
+              <div className="flex justify-between items-center">
+                <div className="flex items-center gap-2">
+                  <Button variant="ghost" size="icon" className="h-8 w-8 text-white" onClick={handlePlayPause}>
+                    {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
+                  </Button>
+
+                  <span className="text-xs text-white">
+                    {formatTime(played * duration)} / {formatTime(duration)}
+                  </span>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <div className="hidden sm:flex items-center gap-2 w-24">
+                    <Button variant="ghost" size="icon" className="h-8 w-8 text-white" onClick={toggleMute}>
+                      {isMuted ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
+                    </Button>
+                    <Slider
+                      value={[volume]}
+                      max={1}
+                      step={0.01}
+                      onValueChange={handleVolumeChange}
+                      className="h-1"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </CardContent>
     </Card>

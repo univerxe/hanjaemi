@@ -3,22 +3,23 @@ import CustomVideoPlayer from "./custom-video-player"
 import YouTubeVideoPlayer from "./youtube-video-player"
 
 export default function VideoPlayer({ src, onColorChange }: VideoPlayerProps) {
-  const isYouTubeUrl = (url: string) => {
-    const youtubeRegex = /^(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/
-    return youtubeRegex.test(url)
-  }
-
   const getYouTubeVideoId = (url: string) => {
-    const match = url.match(/^(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/)
-    return match ? match[1] : null
-  }
+    const patterns = [
+      /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i,
+      /^[^"&?\/\s]{11}$/
+    ];
 
-  if (isYouTubeUrl(src)) {
-    const youtubeId = getYouTubeVideoId(src)
-    if (youtubeId) {
-      return <YouTubeVideoPlayer src={src} youtubeId={youtubeId} onColorChange={onColorChange} />
+    for (const pattern of patterns) {
+      const match = url.match(pattern);
+      if (match) return match[1];
     }
+    return null;
   }
 
-  return <CustomVideoPlayer src={src} onColorChange={onColorChange} />
+  const youtubeId = getYouTubeVideoId(src);
+  if (youtubeId) {
+    return <YouTubeVideoPlayer src={src} />;
+  }
+
+  return <CustomVideoPlayer src={src} onColorChange={onColorChange} />;
 }

@@ -14,10 +14,10 @@ export default function Home() {
   const [mounted, setMounted] = useState(false)
 
   // Video source - in a real implementation, this would be processed server-side
-  const videoSource = "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+  const videoSource = "https://www.youtube.com/embed/5EpyN_6dqyk"
 
   // YouTube video ID for thumbnail/preview (just for demonstration)
-  const youtubeId = "dQw4w9WgXcQ"
+  const youtubeId = "5EpyN_6dqyk"
 
   useEffect(() => {
     setMounted(true)
