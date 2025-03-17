@@ -53,14 +53,13 @@ export default function Home() {
         <div className="order-2 md:order-1 md:col-span-4 flex items-start">
           <div className="w-full max-w-md">
             <EmailForm /> 
-            
+        
           </div>
         </div>
         <div className="order-1 md:order-2 md:col-span-8">
           <CustomVideoPlayer src={videoSource} youtubeId={youtubeId} onColorChange={setDominantColor} />
         </div>
       </div>
-
       <Footer />
     </main>
   )

@@ -103,79 +103,79 @@ export default function EmailForm() {
       <CardContent className="p-6">
         <div className="space-y-4">
           <div className="space-y-2">
-            <h2 className={`text-xl font-semibold flex items-center gap-2 ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
-              Join the Waitlist <Send className="h-4 w-4 animate-bounce" />
-            </h2>
-            <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
-              After watching our introduction, be the first to experience HanJaemi when we launch.
-            </p>
+        <h2 className={`text-xl font-semibold flex items-center gap-2 font-merriweather ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
+          Join the Waitlist <Send className="h-4 w-4 animate-bounce" />
+        </h2>
+        <p className={`text-sm font-merriweather ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
+          After watching our introduction, be the first to experience HanJaemi when we launch.
+        </p>
           </div>
 
           {!isSubmitted ? (
-            <>
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="flex gap-4">
-                  <div className="relative flex-1">
-                    <Input
-                      type="text"
-                      placeholder="First name"
-                      value={firstName}
-                      onChange={(e) => setFirstName(e.target.value)}
-                      className={`border-0 rounded-lg px-4 h-8 focus:ring-2 w-full ${theme === 'dark' ? 'bg-white/20 text-white placeholder:text-gray-500 focus:ring-white' : 'bg-gray-300 text-black placeholder:text-gray-500 focus:ring-black'}`}
-                    />
-                  </div>
-                  <div className="relative flex-1">
-                    <Input
-                      type="text"
-                      placeholder="Last name"
-                      value={lastName}
-                      onChange={(e) => setLastName(e.target.value)}
-                      className={`border-0 rounded-lg px-4 h-8 focus:ring-2 w-full ${theme === 'dark' ? 'bg-white/20 text-white placeholder:text-gray-500 focus:ring-white' : 'bg-gray-300 text-black placeholder:text-gray-500 focus:ring-black'}`}
-                    />
-                  </div>
-                </div>
-                <div className="relative">
-                  <Input
-                    type="email"
-                    placeholder="Email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className={`border-0 rounded-lg px-4 h-8 focus:ring-2 w-full ${theme === 'dark' ? 'bg-white/20 text-white placeholder:text-gray-500 focus:ring-white' : 'bg-gray-300 text-black placeholder:text-gray-500 focus:ring-black'}`}
-                  />
-                </div>
-
-                <Button
-                  type="submit"
-                  className="w-full h-8 text-xs font-medium group overflow-hidden relative"
-                  size="sm"
-                  disabled={isSubmitting}
-                >
-                  <span className="flex items-center justify-center gap-1 group-hover:-translate-y-8 transition-transform duration-300">
-                    Get Early Access
-                    <ArrowRight className="h-3 w-3" />
-                  </span>
-                  <span className="absolute inset-0 flex items-center justify-center gap-1 translate-y-8 group-hover:translate-y-0 transition-transform duration-300">
-                    Send
-                    <Send className="h-3 w-3" />
-                  </span>
-                </Button>
-              </form>
-
-              <p className={`text-xs text-center ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'}`}>
-                By signing up, you agree to our{" "}
-                <a href="#" className="underline hover:text-gray-400">
-                  Terms & Conditions
-                </a>
-              </p>
-            </>
-          ) : (
-            <div className="text-center space-y-3">
-              <Check className="h-12 w-12 text-green-500 mx-auto animate-pulse" />
-              <h2 className={`text-xl font-semibold ${theme === 'dark' ? 'text-white' : 'text-black'}`}>Thank You!</h2>
-              <p className={`text-sm ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
-                We've added you to our early access list. We'll notify you when we launch!
-              </p>
+        <>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="flex gap-4">
+          <div className="relative flex-1">
+            <Input
+              type="text"
+              placeholder="First name"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+              className={`border-0 rounded-lg px-4 h-8 focus:ring-2 w-full font-merriweather ${theme === 'dark' ? 'bg-white/20 text-white placeholder:text-gray-500 focus:ring-white' : 'bg-gray-300 text-black placeholder:text-gray-500 focus:ring-black'}`}
+            />
+          </div>
+          <div className="relative flex-1">
+            <Input
+              type="text"
+              placeholder="Last name"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+              className={`border-0 rounded-lg px-4 h-8 focus:ring-2 w-full font-merriweather ${theme === 'dark' ? 'bg-white/20 text-white placeholder:text-gray-500 focus:ring-white' : 'bg-gray-300 text-black placeholder:text-gray-500 focus:ring-black'}`}
+            />
+          </div>
             </div>
+            <div className="relative">
+          <Input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className={`border-0 rounded-lg px-4 h-8 focus:ring-2 w-full font-merriweather ${theme === 'dark' ? 'bg-white/20 text-white placeholder:text-gray-500 focus:ring-white' : 'bg-gray-300 text-black placeholder:text-gray-500 focus:ring-black'}`}
+          />
+            </div>
+
+            <Button
+          type="submit"
+          className="w-full h-8 text-xs font-medium group overflow-hidden relative font-merriweather"
+          size="sm"
+          disabled={isSubmitting}
+            >
+          <span className="flex items-center justify-center gap-1 group-hover:-translate-y-8 transition-transform duration-300">
+            Get Early Access
+            <ArrowRight className="h-3 w-3" />
+          </span>
+          <span className="absolute inset-0 flex items-center justify-center gap-1 translate-y-8 group-hover:translate-y-0 transition-transform duration-300">
+            Send
+            <Send className="h-3 w-3" />
+          </span>
+            </Button>
+          </form>
+
+          <p className={`text-xs text-center font-merriweather ${theme === 'dark' ? 'text-gray-500' : 'text-gray-600'}`}>
+            By signing up, you agree to our{" "}
+            <a href="#" className="underline hover:text-gray-400">
+          Terms & Conditions
+            </a>
+          </p>
+        </>
+          ) : (
+        <div className="text-center space-y-3">
+          <Check className="h-12 w-12 text-green-500 mx-auto animate-pulse" />
+          <h2 className={`text-xl font-semibold font-merriweather ${theme === 'dark' ? 'text-white' : 'text-black'}`}>Thank You!</h2>
+          <p className={`text-sm font-merriweather ${theme === 'dark' ? 'text-gray-400' : 'text-gray-600'}`}>
+            We've added you to our early access list. We'll notify you when we launch!
+          </p>
+        </div>
           )}
         </div>
       </CardContent>
